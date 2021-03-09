@@ -215,39 +215,17 @@ const handleDeleteThread = (req,res)=>{
     try{
         let id = req.matches.thread_id
         var qs 
-        qs = `SELECT * FROM QUESTION where thread ="${id}"`
-
+        qs = `DELETE FROM THREAD where id ="${id}"`
         connection.query(qs,(err,values)=>{
-            if(err){
-                res.writeHead(500)
-                res.write('db error ')
+            if(values.affectedRows==0){
+                res.writeHead(404)
+                res.write('no content')
                 res.end()
-                return 
-            }
-            if(values[0]==null){
+            }else{
                 res.writeHead(200)
-                res.write('no data found')
+                res.write('deleted thread')
                 res.end()
-                return 
-            }
-            values.map(el=>{
-                qs = `DELETE FROM QUESTION WHERE id = "${el.id}"`
-                var qw1 = `DELETE FROM ANSWER WHERE question = "${el.id}"`
-                connection.query(qs)
-                connection.query(qw1)
-            })
-            qs = `DELETE FROM THREAD where id ="${id}"`
-            connection.query(qs,(err,values)=>{
-                if(values.affectedRows==0){
-                    res.writeHead(200)
-                    res.write('no resource found')
-                    res.end()
-                }else{
-                    res.writeHead(200)
-                    res.write('deleted thread')
-                    res.end()
-                }             
-            })
+            }             
         })
     }catch(e){
         res.writeHead(500)
@@ -258,23 +236,25 @@ const handleDeleteThread = (req,res)=>{
 const handleDeleteQuestion = (req,res)=>{
     try{
         let id=  req.matches.question_id
+        
         var qs 
-            
-        qs = `DELETE FROM QUESTION WHERE id = "${id}"`
-
+        qs = `SELECT * FROM QUESTION WHERE id = "${id}"`
+        console.log(qs)
         connection.query(qs,(err,values)=>{
-            if(values.affectedRows==0){
-                res.write('no resource found')
+            console.log(values)
+            if(values[0]==null){
+                res.writeHead(404)
+                res.write('no content')
                 res.end()
-                return 
+                return
             }
-            qs  = `DETELE FROM ANSWER where question ="${id}"`
-            connection.query(qs,(err,values)=>{
-                res.write('deleted resource')
-                res.end()
-            })
-
+            qs = `DELETE FROM QUESTION WHERE id ="${id}"`
+            connection.query(qs)
+            res.writeHead(200)
+            res.write('deleted')
+            res.end()
         })
+        
 
     }catch(e){
         res.writeHead(500)
@@ -300,7 +280,7 @@ const handleDeleteAnswer = (req,res)=>{
                 res.write('DELETED RESOURCE')
                 res.end()
             }else{
-                res.writeHead(200)
+                res.writeHead(404)
                 res.write('No resource found')
                 res.end()
             }
@@ -388,7 +368,7 @@ const handlePostAnswer =(req,res)=>{
     catch(e){   
         res.writeHead(500);
         res.write('SERVER ERROR')
-        res.end()
+        res.end()   
     }
 
 }
