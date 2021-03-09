@@ -34,12 +34,24 @@ router.get('/:id/test1',(req,res)=>{
 router.put("/thread/:thread_id",(req,res)=>{
     handleCreateNewThread(req,res)
 })
-router.put("/question/:question_id/thread/:thread_id",(req,res)=>{
+// router.put("/question/:question_id/thread/:thread_id",(req,res)=>{
+//     console.log('HERE1')
+//     handelCreateThreadQuestion(req,res)
+// })
+router.put("/thread/:thread_id/question/:question_id",(req,res)=>{
+    console.log('HERE1')
     handelCreateThreadQuestion(req,res)
 })
-router.put("/answer/:answer_id/question/:question_id",(req,res)=>{
+// router.put("/answer/:answer_id/question/:question_id",(req,res)=>{
+//     console.log('HERE1')
+//     handleCreateAnswerQuestion(req,res)
+// })
+
+router.put("/question/:question_id/answer/:answer_id",(req,res)=>{
+    console.log('HERE2')
     handleCreateAnswerQuestion(req,res)
 })
+
 router.get("/threads",(req,res)=>{
     handleGetThreads(req,res)
 })
@@ -81,4 +93,5 @@ http.createServer((req,res)=>{
 }).listen(3000,()=>{
     console.log(`Listening on port ${3000}`)
 })
+
 
