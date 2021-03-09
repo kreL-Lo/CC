@@ -14,6 +14,8 @@ const bodyParser =(req,res)=>{
       });
 }
 
+
+
 module.exports={
     bodyParser
 }

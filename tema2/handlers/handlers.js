@@ -29,8 +29,8 @@ const handleCreateNewThread =(req,res)=>{
         }
     }catch(e){
         console.log(e)
-        res.writeHead(400);
-        res.write('MUST HAVE JSON LIKE {topic:Topic,description :Description }')
+        res.writeHead(500);
+        res.write('SERVER ERROR')
         res.end()
     }
 }
@@ -76,8 +76,8 @@ const handelCreateThreadQuestion =(req,res)=>{
         }
     }
     catch(e){
-        res.writeHead(400);
-        res.write('MUST HAVE JSON LIKE {question:Question}')
+        res.writeHead(500);
+        res.write('SERVER ERROR')
         res.end()
     }
 }
@@ -123,9 +123,8 @@ const handleCreateAnswerQuestion =(req,res)=>{
             }
         }
         catch(e){
-            console.log(e)
-            res.writeHead(400);
-            res.write('MUST HAVE JSON LIKE {asnwer:Answer, description:Description}')
+            res.writeHead(500);
+            res.write('SERVER ERROR')
             res.end()
         }
 }
@@ -308,9 +307,8 @@ const handleDeleteAnswer = (req,res)=>{
             
         })
     }catch(e){
-        console.log(e)
-        res.writeHead(404)
-        res.write('bad request')
+        res.writeHead(500);
+        res.write('SERVER ERROR')
         res.end()
     }
 }
@@ -349,9 +347,8 @@ const handlePostQuestion =(req,res)=>{
         }
     }
     catch(e){   
-        console.log(e)
-        res.writeHead(404)
-        res.write('bad request')
+        res.writeHead(500);
+        res.write('SERVER ERROR')
         res.end()
     }
 }
@@ -389,9 +386,8 @@ const handlePostAnswer =(req,res)=>{
 
     }
     catch(e){   
-        console.log(e)
-        res.writeHead(404)
-        res.write('bad request')
+        res.writeHead(500);
+        res.write('SERVER ERROR')
         res.end()
     }
 
