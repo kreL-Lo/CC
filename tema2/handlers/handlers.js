@@ -138,9 +138,15 @@ const handleGetThreads =(req,res)=>{
                 res.end()
                 return 
             }
-            res.writeHead(200)
-            res.write(JSON.stringify(values))
-            res.end()
+            if(values[0]==null){
+                res.writeHead(404)
+                res.end()
+            }   
+            else{
+                res.writeHead(200)
+                res.write(JSON.stringify(values))
+                res.end()
+            }
         })
     }catch(e){
         res.writeHead(500);
@@ -155,8 +161,16 @@ const handleGetThreadQuestions =(req,res)=>{
         const qs = `SELECT * FROM QUESTION WHERE thread ="${id}"`
         connection.query(qs,(err,values)=>{
             if(!err){
-                res.write(JSON.stringify(values))
-                res.end()
+                if(values[0]==null){
+                    res.writeHead(404)
+                    res.end()
+                }   
+                else{
+                    res.writeHead(200)
+                    res.write(JSON.stringify(values))
+                    res.end()
+                }
+                
             }
             else{
                 res.write('No id found')
@@ -179,8 +193,15 @@ const handleGetQuestionsAnswer = (req,res)=>{
         const qs = `SELECT * FROM ANSWER where question ="${id}"`
         connection.query(qs,(err,values)=>{
             
-            res.write(JSON.stringify(values))
-            res.end()
+            if(values[0]==null){
+                res.writeHead(404)
+                res.write(JSON.stringify(values))
+                res.end()
+            }   
+            else{
+                res.writeHead(200)
+                res.end()
+            }
         })
 
     }catch(e){
@@ -198,8 +219,15 @@ const handleGetSpecificAnswerFromQuestion = (req,res)=>{
 
         const qs = `SELECT * FROM ANSWER where id ="${a_id}"` 
         connection.query(qs,(err,values)=>{
-            res.write(JSON.stringify(values))
-            res.end()
+            if(values[0]==null){
+                res.writeHead(404)
+                res.end()
+            }   
+            else{
+                res.writeHead(200)
+                res.write(JSON.stringify(values))
+                res.end()
+            }
         })
 
     }catch(e){
