@@ -12,11 +12,12 @@ const handleCreateNewThread =(req,res)=>{
                 if(values[0]==null){
                     qs = `INSERT INTO THREAD(id,topic,description) VALUES ("${thread_id}","${topic}","${description}")`
                     res.writeHead(201)
-                    res.write('created')
+                    res.write(JSON.stringify({message:'CREATED'}))       
+
                 }else{
                     qs = `UPDATE THREAD SET topic = "${topic}" , description = "${description}" WHERE id = "${thread_id}"`
                     res.writeHead(200)
-                    res.write('updated')
+                    res.write(JSON.stringify({message:'UPDATED'}))       
                 }
                 res.end()
                 connection.query(qs)
@@ -24,13 +25,13 @@ const handleCreateNewThread =(req,res)=>{
         }
         else{
             res.writeHead(400);
-            res.write('MUST HAVE JSON LIKE {topic:Topic,description :Description}')
+            res.write(JSON.stringify({message:'MUST HAVE JSON LIKE {topic:Topic,description :Description}'}))       
             res.end()
         }
     }catch(e){
         console.log(e)
         res.writeHead(500);
-        res.write('SERVER ERROR')
+        res.write(JSON.stringify({message:'SERVER ERROR'}))       
         res.end()
     }
 }
@@ -48,7 +49,7 @@ const handelCreateThreadQuestion =(req,res)=>{
         connection.query(qs,(err,values)=>{
             if(values[0]==null){
                 res.writeHead(400)
-                res.write('not a valid thread id')
+                res.write(JSON.stringify({message:'not a valid thread id'}))       
                 res.end()
                 return 
             }
@@ -57,10 +58,10 @@ const handelCreateThreadQuestion =(req,res)=>{
                 if(values[0]==null){
                     qs = `INSERT INTO QUESTION(id,question,description,thread) VALUES ("${question_id}","${question}","${descrition}","${thread_id}")`
                     res.writeHead(201)
-                    res.write('CREATED')
+                    res.write(JSON.stringify({message:'CREATED'}))       
                 }else{
                     qs =`UPDATE QUESTION SET question = "${question}" ,thread ="${thread_id}" , description ="${descrition}" WHERE id = "${question_id}" `
-                    res.write('UPDATED')
+                    res.write(JSON.stringify({message:'UPDATED'}))       
                 }
                 connection.query(qs)
                 res.end()
@@ -71,13 +72,13 @@ const handelCreateThreadQuestion =(req,res)=>{
     else{
         console.log(e)
         res.writeHead(400);
-        res.write('MUST HAVE JSON LIKE {question:Question}')
+        res.write(JSON.stringify({message:'MUST HAVE JSON LIKE {question:Question}'}))       
         res.end()
         }
     }
     catch(e){
         res.writeHead(500);
-        res.write('SERVER ERROR')
+        res.write(JSON.stringify({message:'server error'}))       
         res.end()
     }
 }
@@ -94,7 +95,7 @@ const handleCreateAnswerQuestion =(req,res)=>{
             connection.query(qs,(err,values)=>{
                 if(values[0]==null){
                     res.writeHead(404)
-                    res.write('NO question id found')
+                    res.write(JSON.stringify({message:'no question id found'}))       
                     res.end()
                     return 
                 }
@@ -104,11 +105,11 @@ const handleCreateAnswerQuestion =(req,res)=>{
                     if(values[0]==null){
                         qs = `INSERT INTO ANSWER(id,answer,description,question) VALUES ("${answer_id}","${answer}","${description}","${question_id}")`
                         res.writeHead(201)
-                        res.write('created answer')
+                        res.write(JSON.stringify({message:'created answer'}))       
                     }else{
                         qs =`UPDATE ANSWER SET answer ="${answer}", description ="${description}", question ="${question_id}" WHERE id = "${answer_id}" `
                         res.writeHead(200)
-                        res.write('updated answer')
+                        res.write(JSON.stringify({message:'updated answer'}))       
                     }
                     connection.query(qs)
                     res.end()
@@ -118,13 +119,13 @@ const handleCreateAnswerQuestion =(req,res)=>{
 
         else{
             res.writeHead(400);
-            res.write('MUST HAVE JSON LIKE {asnwer:Answer, description:Description}')
+            res.write(JSON.stringify({message:'MUST HAVE JSON LIKE {asnwer:Answer, description:Description}'}))       
             res.end()
             }
         }
         catch(e){
             res.writeHead(500);
-            res.write('SERVER ERROR')
+            res.write(JSON.stringify({message:'server error'}))       
             res.end()
         }
 }
@@ -134,12 +135,13 @@ const handleGetThreads =(req,res)=>{
         connection.query(qs,(err,values)=>{
             if(err){
                 res.writeHead(500);
-                res.write('Error in db ')
+                res.write(JSON.stringify({message:'error in db'}))       
                 res.end()
                 return 
             }
             if(values[0]==null){
                 res.writeHead(404)
+                res.write(JSON.stringify({message:'no content'}))       
                 res.end()
             }   
             else{
@@ -150,7 +152,7 @@ const handleGetThreads =(req,res)=>{
         })
     }catch(e){
         res.writeHead(500);
-        res.write('Error in server')
+        res.write(JSON.stringify({message:'error in server'}))       
         res.end()
     }
 }
@@ -163,6 +165,7 @@ const handleGetThreadQuestions =(req,res)=>{
             if(!err){
                 if(values[0]==null){
                     res.writeHead(404)
+                    res.write(JSON.stringify({message:'db error'}))       
                     res.end()
                 }   
                 else{
@@ -173,14 +176,14 @@ const handleGetThreadQuestions =(req,res)=>{
                 
             }
             else{
-                res.write('No id found')
                 res.writeHead(404);
+                res.write(JSON.stringify({message:'no id found'}))       
                 res.end()
             }
         })
     }catch(e){
         res.writeHead(500);
-        res.write('Error in server')
+        res.write(JSON.stringify({message:'error in server'}))       
         res.end()
     }
 }
@@ -195,18 +198,19 @@ const handleGetQuestionsAnswer = (req,res)=>{
             
             if(values[0]==null){
                 res.writeHead(404)
-                res.write(JSON.stringify(values))
+                res.write(JSON.stringify({message:'no content'}))       
                 res.end()
             }   
             else{
                 res.writeHead(200)
+                res.write(JSON.stringify(values))
                 res.end()
             }
         })
 
     }catch(e){
         res.writeHead(500);
-        res.write('Error in server')
+        res.write(JSON.stringify({message:'error in server'}))       
         res.end()
     }
 }
@@ -221,6 +225,7 @@ const handleGetSpecificAnswerFromQuestion = (req,res)=>{
         connection.query(qs,(err,values)=>{
             if(values[0]==null){
                 res.writeHead(404)
+                res.write(JSON.stringify({message:'no content'}))       
                 res.end()
             }   
             else{
@@ -232,7 +237,7 @@ const handleGetSpecificAnswerFromQuestion = (req,res)=>{
 
     }catch(e){
         res.writeHead(500);
-        res.write('Error in server')
+        res.write(JSON.stringify({message:'Error in server'}))       
         res.end()
     }
 }
@@ -247,17 +252,17 @@ const handleDeleteThread = (req,res)=>{
         connection.query(qs,(err,values)=>{
             if(values.affectedRows==0){
                 res.writeHead(404)
-                res.write('no content')
+                res.write(JSON.stringify({message:'no content'}))       
                 res.end()
             }else{
                 res.writeHead(200)
-                res.write('deleted thread')
+                res.write(JSON.stringify({message:'deleted thread'}))       
                 res.end()
             }             
         })
     }catch(e){
         res.writeHead(500)
-        res.write('server Error')
+        res.write(JSON.stringify({message:'server error'}))       
         res.end()
     }
 }
@@ -272,21 +277,21 @@ const handleDeleteQuestion = (req,res)=>{
             console.log(values)
             if(values[0]==null){
                 res.writeHead(404)
-                res.write('no content')
+                res.write(JSON.stringify({message:'no content'}))       
                 res.end()
                 return
             }
             qs = `DELETE FROM QUESTION WHERE id ="${id}"`
             connection.query(qs)
             res.writeHead(200)
-            res.write('deleted')
+            res.write(JSON.stringify({message:'deleted'}))       
             res.end()
         })
         
 
     }catch(e){
         res.writeHead(500)
-        res.write('server Error')
+        res.write(JSON.stringify({message:'server error'}))       
         res.end()
     }
 }
@@ -299,24 +304,24 @@ const handleDeleteAnswer = (req,res)=>{
         connection.query(qs,(err,values)=>{
             if(err){
                 res.writeHead(500)
-                res.write('db error')
+                res.write(JSON.stringify({message:'db error'}))       
                 res.end()
                 return 
             }            
             if(values.affectedRows>0){
                 res.writeHead(200)
-                res.write('DELETED RESOURCE')
+                res.write(JSON.stringify({message:'DELETED RESOURCE'}))       
                 res.end()
             }else{
                 res.writeHead(404)
-                res.write('No resource found')
+                res.write(JSON.stringify({message:'No resource found'}))       
                 res.end()
             }
             
         })
     }catch(e){
         res.writeHead(500);
-        res.write('SERVER ERROR')
+        res.write(JSON.stringify({message:'SERVER ERROR'}))       
         res.end()
     }
 }
@@ -336,7 +341,7 @@ const handlePostQuestion =(req,res)=>{
                 if (values[0]==null){
 
                     res.writeHead(200)
-                    res.write('no thread with the given id found')
+                    res.write(JSON.stringify({message:'no thread with the given id found'}))       
                     res.end()
                     return 
                 }
@@ -344,19 +349,20 @@ const handlePostQuestion =(req,res)=>{
                 connection.query(qs)
 
                 res.writeHead(201)
-                res.write('Inserted a question')
+                res.write(JSON.stringify({message:'Inserted a question'}))       
+                res.write('')
                 res.end()
             })
 
         }else{
             res.writeHead(404)
-            res.write('WRONG JSON CONTENT , MUST BE LIKE {description:<str> , question:<str> }')
+            res.write(JSON.stringify({message:'WRONG JSON CONTENT , MUST BE LIKE {description:<str> , question:<str> }'}))       
             res.end()
         }
     }
     catch(e){   
         res.writeHead(500);
-        res.write('SERVER ERROR')
+        res.write(JSON.stringify({message:'SERVER ERROR'}))       
         res.end()
     }
 }
@@ -373,7 +379,7 @@ const handlePostAnswer =(req,res)=>{
                 if(values[0]==null){
 
                     res.writeHead(200)
-                    res.write('no question with the given id found')
+                    res.write(JSON.stringify({message:'no question with the given id found'}))
                     res.end()
                     return 
                 }
@@ -382,20 +388,20 @@ const handlePostAnswer =(req,res)=>{
                 connection.query(qs)
 
                 res.writeHead(201)
-                res.write('Inserted an anwer')
+                res.write(JSON.stringify({message:'Inserted an anwer'}))
                 res.end()
             })
 
         }else{
             res.writeHead(404)
-            res.write('Wront json type')
+            res.write(JSON.stringify({message:'Wront json type'}))
             res.end()
         }
 
     }
     catch(e){   
         res.writeHead(500);
-        res.write('SERVER ERROR')
+        res.write(JSON.stringify({message:'server error'}))
         res.end()   
     }
 

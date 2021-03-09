@@ -76,7 +76,8 @@ class Router
                 }
             })
             if(found ==0){
-                 res.writeHead(405,'Not allowed')
+                 res.writeHead(405)
+                 res.write(JSON.stringify({message:'NOT ALLOWED'}))       
                 res.end()
             }
         }
